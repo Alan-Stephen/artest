@@ -15,6 +15,11 @@
       // Initialize compass data
       var compassHeading = 0;
 
+      // Initialize position data
+      var positionX = 0;
+      var positionY = 0;
+      var positionZ = -5;
+
       // Add deviceorientation event listener
       window.addEventListener('deviceorientation', function(event) {
         // Get compass heading (in degrees)
@@ -27,6 +32,14 @@
         var accelerationX = event.acceleration.x;
         var accelerationY = event.acceleration.y;
         var accelerationZ = event.acceleration.z;
+
+        // Update position based on acceleration values
+        positionX += accelerationX / 100;
+        positionY += accelerationY / 100;
+        positionZ += accelerationZ / 100;
+
+        // Set position of the box
+        box.setAttribute('position', {x: positionX, y: positionY, z: positionZ});
 
         // Calculate distance from acceleration values
         var distance = Math.sqrt(accelerationX**2 + accelerationY**2 + accelerationZ**2);
