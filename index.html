@@ -21,7 +21,7 @@
           var userLon = position.coords.longitude;
 
           // Calculate position of the box to the north
-          var boxDistance = 0.01; // Distance in kilometers
+          var boxDistance = 0.001; // Distance in kilometers
           var boxBearing = 0; // Bearing in degrees (0 = north)
           var boxLatLon = calculateDestination(userLat, userLon, boxDistance, boxBearing);
 
