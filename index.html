@@ -8,11 +8,15 @@
       
     window.onload = init;
     let token = document.getElementById('arToken');
+    let integer = 0;
+    let button = document.getElementById('button');
       
     function init(){
       window.addEventListener('devicemotion',function(event){       
               const acceleration = event.acceleration.x;       
               const scale = acceleration / 10;
+              button.textContent = integer;
+              integer++;
               token.object3D.scale.set(scale, scale, scale);
        })
     }
