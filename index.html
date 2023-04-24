@@ -37,9 +37,9 @@
         var accelerationZ = event.acceleration.z;
 
         // Update position based on acceleration values
-        positionX += accelerationX / 100;
-        positionY += accelerationY / 100;
-        positionZ += accelerationZ / 100;
+        positionX += accelerationX / 50;
+        positionY += accelerationY / 50;
+        positionZ += accelerationZ / 50;
 
         // Set position of the box
         box.setAttribute('position', {x: positionX, y: positionY, z: positionZ});
@@ -48,7 +48,7 @@
         var distance = Math.sqrt(accelerationX**2 + accelerationY**2 + accelerationZ**2);
 
         // Increment scale factor based on distance
-        scaleFactor += distance / 1000; // You can adjust the scaling factor as needed
+        scaleFactor += distance / 500; // You can adjust the scaling factor as needed
 
         // Set scale of the box based on scale factor
         box.setAttribute('scale', {x: scaleFactor, y: scaleFactor, z: scaleFactor});
