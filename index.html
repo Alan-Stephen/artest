@@ -29,33 +29,42 @@
         compassHeading = event.alpha;
       });
 
-      // Add devicemotion event listener
-      window.addEventListener('devicemotion', function(event) {
-        // Get acceleration values
-        var accelerationX = event.acceleration.x;
-        var accelerationY = event.acceleration.y;
-        var accelerationZ = event.acceleration.z;
-
-        // Update position based on acceleration values
-        positionX += accelerationX / 50;
-        positionY += accelerationY / 50;
-        positionZ += accelerationZ / 50;
-
-        // Set position of the box
-        box.setAttribute('position', {x: positionX, y: positionY, z: positionZ});
-
-        // Calculate distance from acceleration values
-        var distance = Math.sqrt(accelerationX**2 + accelerationY**2 + accelerationZ**2);
-
-        // Increment scale factor based on distance
-        scaleFactor += distance / 100; // You can adjust the scaling factor as needed
-
-        // Set scale of the box based on scale factor
-        box.setAttribute('scale', {x: scaleFactor, y: scaleFactor, z: scaleFactor});
-
-        // Update rotation of the box based on compass heading
+      // Update rotation of the box based on compass heading
+      function updateRotation() {
         box.setAttribute('rotation', {x: 0, y: compassHeading, z: 0});
-      });
+        requestAnimationFrame(updateRotation);
+      }
+      updateRotation();
+
+      // Start Accelerometer API
+      if (window.Accelerometer) {
+        var accelerometer = new Accelerometer({frequency: 60});
+        accelerometer.addEventListener('reading', function() {
+          // Get acceleration values
+          var accelerationX = accelerometer.x;
+          var accelerationY = accelerometer.y;
+          var accelerationZ = accelerometer.z;
+
+          // Update position based on compass heading and acceleration values
+          var compassRad = compassHeading * (Math.PI / 180);
+          var distanceX = Math.sin(compassRad) * accelerationX;
+          var distanceZ = Math.cos(compassRad) * accelerationX;
+          positionX += distanceX / 50;
+          positionY += accelerationY / 50;
+          positionZ += distanceZ / 50;
+
+          // Set position of the box
+          box.setAttribute('position', {x: positionX, y: positionY, z: positionZ});
+
+          // Calculate distance from compass heading and increment scale factor
+          var distance = Math.abs(compassHeading) / 180;
+          scaleFactor = 1 + distance;
+
+          // Set scale of the box based on scale factor
+          box.setAttribute('scale', {x: scaleFactor, y: scaleFactor, z: scaleFactor});
+        });
+        accelerometer.start();
+      }
     </script>
   </body>
 </html>
