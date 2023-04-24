@@ -12,7 +12,7 @@
     let button = document.getElementById('button');
       
     function init(){
-      window.addEventListener('devicemotion',function(event){       
+      window.addEventListener('devicemotion',function(event) => {       
               const acceleration = event.acceleration.x;       
               const scale = acceleration / 10;
               button.textContent = integer;
