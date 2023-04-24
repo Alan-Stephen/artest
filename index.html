@@ -10,11 +10,11 @@
     let token = document.getElementById('arToken');
       
     function init(){
-      window.addEventListener('devicemotion',function(event)){       
+      window.addEventListener('devicemotion',function(event){       
               const acceleration = event.acceleration.x;       
               const scale = acceleration / 10;
               token.object3D.scale.set(scale, scale, scale);
-       }
+       })
     }
     </script>
     <div>
