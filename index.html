@@ -5,27 +5,75 @@
   </head>
   <body>
     <a-scene>
-      <a-box position="0 0 -5" color="red"></a-box>
+      <a-box id="myBox" position="0 0 -5" color="red"></a-box>
     </a-scene>
 
     <script>
       // Get reference to the box entity
-      var box = document.querySelector('a-box');
+      var box = document.querySelector('#myBox');
 
-      // Add devicemotion event listener
-      window.addEventListener('devicemotion', function(event) {
-        // Get acceleration values
-        var accelerationX = event.acceleration.x;
-        var accelerationY = event.acceleration.y;
-        var accelerationZ = event.acceleration.z;
+      // Store initial device orientation
+      var initialOrientation = null;
+      window.addEventListener('deviceorientation', function(event) {
+        if (initialOrientation === null) {
+          initialOrientation = {
+            alpha: event.alpha,
+            beta: event.beta,
+            gamma: event.gamma
+          };
+        }
+      });
 
-        // Calculate distance from acceleration values
-        var distance = Math.sqrt(accelerationX**2 + accelerationY**2 + accelerationZ**2);
+      // Function to calculate distance between two points in 3D space
+      function calculateDistance(x1, y1, z1, x2, y2, z2) {
+        var dx = x2 - x1;
+        var dy = y2 - y1;
+        var dz = z2 - z1;
+        return Math.sqrt(dx ** 2 + dy ** 2 + dz ** 2);
+      }
 
-        // Set scale of the box based on distance
+      // Function to update box scale based on distance
+      function updateBoxScale(distance) {
         var scale = 1 + (distance / 10); // You can adjust the scaling factor as needed
         box.setAttribute('scale', {x: scale, y: scale, z: scale});
-      });
+      }
+
+      // Function to handle device orientation change
+      function handleDeviceOrientationChange(event) {
+        if (initialOrientation !== null) {
+          // Calculate change in orientation angles
+          var deltaAlpha = event.alpha - initialOrientation.alpha;
+          var deltaBeta = event.beta - initialOrientation.beta;
+          var deltaGamma = event.gamma - initialOrientation.gamma;
+
+          // Estimate movement direction in 3D space
+          var movementDirection = new THREE.Vector3(
+            Math.sin(deltaGamma * (Math.PI / 180)),
+            -Math.sin(deltaBeta * (Math.PI / 180)),
+            -Math.cos(deltaGamma * (Math.PI / 180))
+          );
+
+          // Normalize movement direction
+          movementDirection.normalize();
+
+          // Get box position
+          var boxPosition = new THREE.Vector3(box.object3D.position.x, box.object3D.position.y, box.object3D.position.z);
+
+          // Estimate distance from box based on movement direction
+          var distance = calculateDistance(0, 0, 0, movementDirection.x, movementDirection.y, movementDirection.z);
+
+          // Update box scale based on distance
+          updateBoxScale(distance);
+
+          // Reset initial orientation for next iteration
+          initialOrientation.alpha = event.alpha;
+          initialOrientation.beta = event.beta;
+          initialOrientation.gamma = event.gamma;
+        }
+      }
+
+      // Add deviceorientation event listener
+      window.addEventListener('deviceorientation', handleDeviceOrientationChange);
     </script>
   </body>
 </html>
