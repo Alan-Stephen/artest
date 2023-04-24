@@ -22,7 +22,7 @@
     
     let tokenCoords = token.object3D.position;
     let cameraCoords = camera.object3D.position;
-    let distance = tokenCoords.distanceTo(cameraPosition);
+    let distance = tokenCoords.distanceTo(cameraCoords);
       
     let initialDistance = distance;
     function updateTokenSize(){
