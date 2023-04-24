@@ -11,11 +11,13 @@
     function updateTokenSize(){
       let token = document.getElementById('arToken');
       let camera = document.getElementById('camera');
-    
+      let button = document.getElementById('button')
+      
       let tokenCoords = token.object3D.position;
       let cameraCoords = camera.object3D.position;
       let distance = tokenCoords.distanceTo(cameraCoords);
       
+      button.textContent = distance;
       console.log(distance);
       requestAnimationFrame(updateTokenSize);
     } 
@@ -25,7 +27,7 @@
     }
     </script>
     <div>
-      <button style="position: relative; z-index: 100;">
+      <button id="button" style="position: relative; z-index: 100;">
           Click me
       </button>
     </div>
