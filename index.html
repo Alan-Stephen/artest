@@ -8,7 +8,7 @@
     let camera = document.getElementById('camera');
     
     let tokenCoords = box.object3D.position;
-    let cameraCOords = camera.object3D.position;
+    let cameraCoords = camera.object3D.position;
     let distance = boxPosition.distanceTo(cameraPosition);
       
     let initialDistance = distance;
@@ -18,7 +18,7 @@
       
       const scaleFactor = intialDistance / distance;
       
-      box.object3D.scale.set(scaleFactor,scaleFactor,scaleFactor)
+      token.object3D.scale.set(scaleFactor,scaleFactor,scaleFactor)
       
       requestAnimationFrame(updateTokenSize);
       
