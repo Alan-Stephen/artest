@@ -3,6 +3,30 @@
     <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
   </head>
   <body>
+    <script>
+    let token = document.getElementById('arToken');
+    let camera = document.getElementById('camera');
+    
+    let tokenCoords = box.object3D.position;
+    let cameraCOords = camera.object3D.position;
+    let distance = boxPosition.distanceTo(cameraPosition);
+      
+    let initialDistance = distance;
+    function updateTokenSize(){
+      cameraCoords = camera.object3D.position;
+      distance = tokenCoords.distanceTo(cameraCoords);
+      
+      const scaleFactor = intialDistance / distance;
+      
+      box.object3D.scale.set(scaleFactor,scaleFactor,scaleFactor)
+      
+      requestAnimationFrame(updateTokenSize);
+      
+    }  
+      
+    updateTokenSize();
+    </script>
+    
     <div>
       <button style="position: relative; z-index: 100;">
           Click me
@@ -11,10 +35,8 @@
       
     <div>
       <a-scene vr-mode-ui="enabled: false">
-        <a-camera look-controls="touchEnabled: false;"></a-camera>
-        <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
-        <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
-        <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+        <a-camera id="camera" look-controls="touchEnabled: false;"></a-camera>
+        <a-box id="arToken" position="10 10 10" rotation="0 45 0" color="#4CC3D9"></a-box>
       </a-scene>
     </div>
   </body>
