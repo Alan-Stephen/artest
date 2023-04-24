@@ -2,8 +2,21 @@
   <head>
     <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
   </head>
-  <body>
-    <script>
+  <body>    
+    <div>
+      <button style="position: relative; z-index: 100;">
+          Click me
+      </button>
+    </div>
+      
+    <div>
+      <a-scene vr-mode-ui="enabled: false">
+        <a-camera id="camera" look-controls="touchEnabled: false;"></a-camera>
+        <a-box id="arToken" position="10 10 10" rotation="0 45 0" color="#4CC3D9"></a-box>
+      </a-scene>
+    </div>
+    
+<script>
     let token = document.getElementById('arToken');
     let camera = document.getElementById('camera');
     
@@ -25,19 +38,7 @@
     }  
       
     updateTokenSize();
-    </script>
-    
-    <div>
-      <button style="position: relative; z-index: 100;">
-          Click me
-      </button>
-    </div>
-      
-    <div>
-      <a-scene vr-mode-ui="enabled: false">
-        <a-camera id="camera" look-controls="touchEnabled: false;"></a-camera>
-        <a-box id="arToken" position="10 10 10" rotation="0 45 0" color="#4CC3D9"></a-box>
-      </a-scene>
-    </div>
+</script>
+
   </body>
 </html>
