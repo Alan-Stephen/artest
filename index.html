@@ -16,36 +16,50 @@
       if (navigator.geolocation) {
         // Watch for changes in position
         navigator.geolocation.watchPosition(function(position) {
-          // Get distance from user's position to the box
+          // Get user's position
           var userLat = position.coords.latitude;
           var userLon = position.coords.longitude;
-          var boxLat = 0; // Set the latitude of the box
-          var boxLon = 0; // Set the longitude of the box
-          var distance = haversine(userLat, userLon, boxLat, boxLon);
 
-          // Set scale of the box based on distance
-          var scale = 1 + (distance / 100); // You can adjust the scaling factor as needed
-          box.setAttribute('scale', {x: scale, y: scale, z: scale});
+          // Calculate position of the box to the north
+          var boxDistance = 0.01; // Distance in kilometers
+          var boxBearing = 0; // Bearing in degrees (0 = north)
+          var boxLatLon = calculateDestination(userLat, userLon, boxDistance, boxBearing);
+
+          // Update the position of the box
+          box.setAttribute('position', {x: boxLatLon.lon, y: 1, z: boxLatLon.lat});
         });
       } else {
         console.error('Geolocation is not supported in this browser.');
       }
 
-      // Haversine formula to calculate distance between two coordinates
-      function haversine(lat1, lon1, lat2, lon2) {
+      // Calculate destination using haversine formula
+      function calculateDestination(lat, lon, distance, bearing) {
         var R = 6371; // Radius of the Earth in km
-        var dLat = toRad(lat2 - lat1);
-        var dLon = toRad(lon2 - lon1);
-        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-                Math.sin(dLon/2) * Math.sin(dLon/2);
-        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-        return R * c * 1000; // Distance in meters
+        var d = distance / R; // Distance in radians
+
+        var lat1 = toRad(lat);
+        var lon1 = toRad(lon);
+        var brng = toRad(bearing);
+
+        var lat2 = Math.asin(Math.sin(lat1) * Math.cos(d) +
+                  Math.cos(lat1) * Math.sin(d) * Math.cos(brng));
+        var lon2 = lon1 + Math.atan2(Math.sin(brng) * Math.sin(d) * Math.cos(lat1),
+                  Math.cos(d) - Math.sin(lat1) * Math.sin(lat2));
+
+        lat2 = toDeg(lat2);
+        lon2 = toDeg(lon2);
+
+        return { lat: lat2, lon: lon2 };
       }
 
       // Convert degrees to radians
       function toRad(deg) {
         return deg * (Math.PI/180);
+      }
+
+      // Convert radians to degrees
+      function toDeg(rad) {
+        return rad * (180/Math.PI);
       }
     </script>
   </body>
