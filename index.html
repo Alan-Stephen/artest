@@ -20,6 +20,9 @@
       var positionY = 0;
       var positionZ = -5;
 
+      // Initialize scale factor
+      var scaleFactor = 1;
+
       // Add deviceorientation event listener
       window.addEventListener('deviceorientation', function(event) {
         // Get compass heading (in degrees)
@@ -44,9 +47,11 @@
         // Calculate distance from acceleration values
         var distance = Math.sqrt(accelerationX**2 + accelerationY**2 + accelerationZ**2);
 
-        // Set scale of the box based on distance
-        var scale = 1 + (distance / 10); // You can adjust the scaling factor as needed
-        box.setAttribute('scale', {x: scale, y: scale, z: scale});
+        // Increment scale factor based on distance
+        scaleFactor += distance / 1000; // You can adjust the scaling factor as needed
+
+        // Set scale of the box based on scale factor
+        box.setAttribute('scale', {x: scaleFactor, y: scaleFactor, z: scaleFactor});
 
         // Update rotation of the box based on compass heading
         box.setAttribute('rotation', {x: 0, y: compassHeading, z: 0});
