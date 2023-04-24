@@ -7,9 +7,9 @@
     let token = document.getElementById('arToken');
     let camera = document.getElementById('camera');
     
-    let tokenCoords = box.object3D.position;
+    let tokenCoords = token.object3D.position;
     let cameraCoords = camera.object3D.position;
-    let distance = boxPosition.distanceTo(cameraPosition);
+    let distance = tokenCoords.distanceTo(cameraPosition);
       
     let initialDistance = distance;
     function updateTokenSize(){
