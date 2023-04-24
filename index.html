@@ -24,14 +24,6 @@
         }
       });
 
-      // Function to calculate distance between two points in 3D space
-      function calculateDistance(x1, y1, z1, x2, y2, z2) {
-        var dx = x2 - x1;
-        var dy = y2 - y1;
-        var dz = z2 - z1;
-        return Math.sqrt(dx ** 2 + dy ** 2 + dz ** 2);
-      }
-
       // Function to update box scale based on distance
       function updateBoxScale(distance) {
         var scale = 1 + (distance / 10); // You can adjust the scaling factor as needed
@@ -42,32 +34,21 @@
       function handleDeviceOrientationChange(event) {
         if (initialOrientation !== null) {
           // Calculate change in orientation angles
-          var deltaAlpha = event.alpha - initialOrientation.alpha;
-          var deltaBeta = event.beta - initialOrientation.beta;
           var deltaGamma = event.gamma - initialOrientation.gamma;
 
-          // Estimate movement direction in 3D space
-          var movementDirection = new THREE.Vector3(
-            Math.sin(deltaGamma * (Math.PI / 180)),
-            -Math.sin(deltaBeta * (Math.PI / 180)),
-            -Math.cos(deltaGamma * (Math.PI / 180))
-          );
+          // Estimate movement direction along z-axis based on gamma angle
+          var movementDirection = Math.sin(deltaGamma * (Math.PI / 180));
 
-          // Normalize movement direction
-          movementDirection.normalize();
-
-          // Get box position
-          var boxPosition = new THREE.Vector3(box.object3D.position.x, box.object3D.position.y, box.object3D.position.z);
+          // Get box position along z-axis
+          var boxPosition = box.object3D.position.z;
 
           // Estimate distance from box based on movement direction
-          var distance = calculateDistance(0, 0, 0, movementDirection.x, movementDirection.y, movementDirection.z);
+          var distance = movementDirection * 0.1; // You can adjust the distance factor as needed
 
           // Update box scale based on distance
           updateBoxScale(distance);
 
           // Reset initial orientation for next iteration
-          initialOrientation.alpha = event.alpha;
-          initialOrientation.beta = event.beta;
           initialOrientation.gamma = event.gamma;
         }
       }
