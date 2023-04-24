@@ -3,6 +3,27 @@
     <script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
   </head>
   <body>
+    
+    <script>
+      
+    window.onload = init;
+      
+    function updateTokenSize(){
+      let token = document.getElementById('arToken');
+      let camera = document.getElementById('camera');
+    
+      let tokenCoords = token.object3D.position;
+      let cameraCoords = camera.object3D.position;
+      let distance = tokenCoords.distanceTo(cameraCoords);
+      
+      console.log(distance);
+      updateTokenSize();
+    } 
+  
+    function init(){
+      updateTokenSize();
+    }
+    </script>
     <div>
       <button style="position: relative; z-index: 100;">
           Click me
