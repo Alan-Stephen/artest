@@ -48,7 +48,7 @@
         var distance = Math.sqrt(accelerationX**2 + accelerationY**2 + accelerationZ**2);
 
         // Increment scale factor based on distance
-        scaleFactor += distance / 500; // You can adjust the scaling factor as needed
+        scaleFactor += distance / 100; // You can adjust the scaling factor as needed
 
         // Set scale of the box based on scale factor
         box.setAttribute('scale', {x: scaleFactor, y: scaleFactor, z: scaleFactor});
