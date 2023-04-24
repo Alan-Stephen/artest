@@ -15,7 +15,7 @@
       window.addEventListener('devicemotion', (event) => {       
               const acceleration = event.acceleration.x;       
               const scale = acceleration / 10;
-              button.textContent = integer;
+              button.textContent = event.rotationRate;
               integer++;
               token.object3D.scale.set(scale, scale, scale);
        });
