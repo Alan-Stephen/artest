@@ -17,7 +17,7 @@
       let distance = tokenCoords.distanceTo(cameraCoords);
       
       console.log(distance);
-      updateTokenSize();
+      requestAnimationFrame(updateTokenSize);
     } 
   
     function init(){
