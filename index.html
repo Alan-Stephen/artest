@@ -5,20 +5,26 @@
   </head>
   <body>
     <a-scene>
-      <a-box position="0 1 -3" rotation="0 0 0" color="red"></a-box>
+      <a-box position="0 0 -5" color="red"></a-box>
     </a-scene>
-    <script>
-      // Get the A-Frame entity to update
-      var boxEl = document.querySelector('a-box');
 
-      // Add event listener for deviceorientation event
-      window.addEventListener('deviceorientation', function(event) {
-        // Update the rotation of the A-Frame entity based on device motion
-        boxEl.setAttribute('rotation', {
-          x: event.beta,
-          y: event.gamma,
-          z: event.alpha
-        });
+    <script>
+      // Get reference to the box entity
+      var box = document.querySelector('a-box');
+
+      // Add devicemotion event listener
+      window.addEventListener('devicemotion', function(event) {
+        // Get acceleration values
+        var accelerationX = event.acceleration.x;
+        var accelerationY = event.acceleration.y;
+        var accelerationZ = event.acceleration.z;
+
+        // Calculate distance from acceleration values
+        var distance = Math.sqrt(accelerationX**2 + accelerationY**2 + accelerationZ**2);
+
+        // Set scale of the box based on distance
+        var scale = 1 + (distance / 10); // You can adjust the scaling factor as needed
+        box.setAttribute('scale', {x: scale, y: scale, z: scale});
       });
     </script>
   </body>
