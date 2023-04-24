@@ -7,23 +7,14 @@
     <script>
       
     window.onload = init;
+    let token = document.getElementById('arToken');
       
-    function updateTokenSize(){
-      let token = document.getElementById('arToken');
-      let camera = document.getElementById('camera');
-      let button = document.getElementById('button')
-      
-      let tokenCoords = token.object3D.position;
-      let cameraCoords = camera.object3D.position;
-      let distance = tokenCoords.distanceTo(cameraCoords);
-      
-      button.textContent = distance;
-      console.log(distance);
-      requestAnimationFrame(updateTokenSize);
-    } 
-  
     function init(){
-      updateTokenSize();
+      window.addEventListener('devicemotion',function(event)){       
+              const acceleration = event.acceleration.x;       
+              const scale = acceleration / 10;
+              token.object3D.scale.set(scale, scale, scale);
+       }
     }
     </script>
     <div>
