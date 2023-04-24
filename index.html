@@ -32,14 +32,6 @@
     } else {
       // handle regular non iOS 13+ devices
         }
-      } 
-      window.addEventListener('devicemotion', (event) => {       
-              const acceleration = event.acceleration.x;       
-              const scale = acceleration / 10;
-              button.textContent = event.rotationRate;
-              integer++;
-              token.object3D.scale.set(scale, scale, scale);
-       });
     }
     </script>
     <div>
