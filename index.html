@@ -1,69 +1,53 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <title>Device Motion Distance</title>
   </head>
   <body>
-    <a-scene>
-      <a-box id="myBox" position="0 0 -5" color="red"></a-box>
-    </a-scene>
-
+    <h1>Device Motion Distance</h1>
+    <button id="startBtn">Start</button>
+    <button id="stopBtn">Stop</button>
+    <p id="distance">Distance: 0 meters</p>
     <script>
-      // Get reference to the box entity
-      var box = document.querySelector('#myBox');
+      let initialAcceleration = null; // Variable to store initial acceleration
+      let distance = 0; // Variable to store calculated distance
 
-      // Initialize compass data
-      var compassHeading = 0;
-
-      // Initialize position data
-      var positionX = 0;
-      var positionY = 0;
-      var positionZ = -5;
-
-      // Initialize scale factor
-      var scaleFactor = 1;
-
-      // Add deviceorientation event listener
-      window.addEventListener('deviceorientation', function(event) {
-        // Get compass heading (in degrees)
-        compassHeading = event.alpha;
+      // Start button event listener
+      document.getElementById('startBtn').addEventListener('click', function () {
+        // Add event listener for device motion
+        window.addEventListener('devicemotion', handleDeviceMotion);
       });
 
-      // Update rotation of the box based on compass heading
-      function updateRotation() {
-        box.setAttribute('rotation', {x: 0, y: compassHeading, z: 0});
-        requestAnimationFrame(updateRotation);
-      }
-      updateRotation();
+      // Stop button event listener
+      document.getElementById('stopBtn').addEventListener('click', function () {
+        // Remove event listener for device motion
+        window.removeEventListener('devicemotion', handleDeviceMotion);
+        // Reset distance and initialAcceleration
+        distance = 0;
+        initialAcceleration = null;
+        // Update distance text
+        document.getElementById('distance').textContent = 'Distance: 0 meters';
+      });
 
-      // Start Accelerometer API
-      if (window.Accelerometer) {
-        var accelerometer = new Accelerometer({frequency: 60});
-        accelerometer.addEventListener('reading', function() {
-          // Get acceleration values
-          var accelerationX = accelerometer.x;
-          var accelerationY = accelerometer.y;
-          var accelerationZ = accelerometer.z;
-
-          // Update position based on compass heading and acceleration values
-          var compassRad = compassHeading * (Math.PI / 180);
-          var distanceX = Math.sin(compassRad) * accelerationX;
-          var distanceZ = Math.cos(compassRad) * accelerationX;
-          positionX += distanceX / 50;
-          positionY += accelerationY / 50;
-          positionZ += distanceZ / 50;
-
-          // Set position of the box
-          box.setAttribute('position', {x: positionX, y: positionY, z: positionZ});
-
-          // Calculate distance from compass heading and update scale factor
-          var distance = Math.abs(compassHeading) / 180;
-          scaleFactor = 1 + distance;
-
-          // Set scale of the box based on scale factor
-          box.object3D.scale.set(scaleFactor, scaleFactor, scaleFactor);
-        });
-        accelerometer.start();
+      // Function to handle device motion event
+      function handleDeviceMotion(event) {
+        // Get acceleration values from event
+        const acceleration = event.accelerationIncludingGravity;
+        // If initialAcceleration is null, set it to current acceleration values
+        if (!initialAcceleration) {
+          initialAcceleration = acceleration;
+        } else {
+          // Calculate acceleration differences
+          const diffX = acceleration.x - initialAcceleration.x;
+          const diffY = acceleration.y - initialAcceleration.y;
+          const diffZ = acceleration.z - initialAcceleration.z;
+          // Calculate distance using Pythagorean theorem
+          const distanceMoved = Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
+          // Add distanceMoved to total distance
+          distance += distanceMoved;
+          // Update distance text
+          document.getElementById('distance').textContent = `Distance: ${distance.toFixed(2)} meters`;
+        }
       }
     </script>
   </body>
