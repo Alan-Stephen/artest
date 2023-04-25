@@ -14,8 +14,20 @@
 
       // Start button event listener
       document.getElementById('startBtn').addEventListener('click', function () {
-        // Add event listener for device motion
-        window.addEventListener('devicemotion', handleDeviceMotion);
+        // Request permission to access device motion
+        if (typeof DeviceMotionEvent.requestPermission === 'function') {
+          DeviceMotionEvent.requestPermission()
+            .then(permissionState => {
+              if (permissionState === 'granted') {
+                // Add event listener for device motion
+                window.addEventListener('devicemotion', handleDeviceMotion);
+              }
+            })
+            .catch(console.error);
+        } else {
+          // If requestPermission is not supported, add event listener for device motion
+          window.addEventListener('devicemotion', handleDeviceMotion);
+        }
       });
 
       // Stop button event listener
