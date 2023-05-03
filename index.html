@@ -1,66 +1,15 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Device Motion Distance</title>
-  </head>
-  <body>
-    <h1>Device Motion Distance</h1>
-    <button id="startBtn">Start</button>
-    <button id="stopBtn">Stop</button>
-    <p id="distance">Distance: 0 meters</p>
-    <script>
-      let initialAcceleration = null; // Variable to store initial acceleration
-      let distance = 0; // Variable to store calculated distance
-
-      // Start button event listener
-      document.getElementById('startBtn').addEventListener('click', function () {
-        // Request permission to access device motion
-        if (typeof DeviceMotionEvent.requestPermission === 'function') {
-          DeviceMotionEvent.requestPermission()
-            .then(permissionState => {
-              if (permissionState === 'granted') {
-                // Add event listener for device motion
-                window.addEventListener('devicemotion', handleDeviceMotion);
-              }
-            })
-            .catch(console.error);
-        } else {
-          // If requestPermission is not supported, add event listener for device motion
-          window.addEventListener('devicemotion', handleDeviceMotion);
-        }
-      });
-
-      // Stop button event listener
-      document.getElementById('stopBtn').addEventListener('click', function () {
-        // Remove event listener for device motion
-        window.removeEventListener('devicemotion', handleDeviceMotion);
-        // Reset distance and initialAcceleration
-        distance = 0;
-        initialAcceleration = null;
-        // Update distance text
-        document.getElementById('distance').textContent = 'Distance: 0 meters';
-      });
-
-      // Function to handle device motion event
-      function handleDeviceMotion(event) {
-        // Get acceleration values from event
-        const acceleration = event.accelerationIncludingGravity;
-        // If initialAcceleration is null, set it to current acceleration values
-        if (!initialAcceleration) {
-          initialAcceleration = acceleration;
-        } else {
-          // Calculate acceleration differences
-          const diffX = acceleration.x - initialAcceleration.x;
-          const diffY = acceleration.y - initialAcceleration.y;
-          const diffZ = acceleration.z - initialAcceleration.z;
-          // Calculate distance using Pythagorean theorem
-          const distanceMoved = Math.sqrt(diffX * diffX + diffY * diffY + diffZ * diffZ);
-          // Add distanceMoved to total distance
-          distance += distanceMoved;
-          // Update distance text
-          document.getElementById('distance').textContent = `Distance: ${distance.toFixed(2)} meters`;
-        }
-      }
-    </script>
-  </body>
+<head>
+<title>AR.js A-Frame Location-based</title>
+<script src="https://aframe.io/releases/1.4.1/aframe.min.js"></script>
+<script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar-threex-location-only.js'></script>
+<script type='text/javascript' src='https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js'></script>
+</head>
+<body>
+<a-scene vr-mode-ui='enabled: false' arjs='sourceType: webcam; videoTexture: true; debugUIEnabled: false' renderer='antialias: true; alpha: true'>
+    <a-camera gps-camera='gpsMinDistance: 1'></a-camera>
+    <a-entity material='color: red' geometry='primitive: box' gps-entity-place="latitude: 52.93086022143557; longitude: -1.208901526407533" scale="10 10 10"></a-entity>
+</a-scene>
+</body>
 </html>
