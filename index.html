@@ -5,7 +5,12 @@
   <script>
     function watchLocation() {
       if ("geolocation" in navigator) {
-        navigator.geolocation.watchPosition(updateLocation);
+        const options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0,
+};
+        navigator.geolocation.watchPosition(updateLocation,options);
       } else {
         alert("Geolocation is not supported by your browser.");
       }
