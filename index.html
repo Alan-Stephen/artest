@@ -10,7 +10,7 @@
   timeout: 5000,
   maximumAge: 0,
 };
-        navigator.geolocation.watchPosition(updateLocation,options);
+        navigator.geolocation.watchPosition(updateLocation,console.log,options);
       } else {
         alert("Geolocation is not supported by your browser.");
       }
